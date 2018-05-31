@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+
+from sys import argv
+
+
+def main(argv):
+
+    # test for enough arguments    
+    if len(argv) < 2:
+        print('uhex -h for help')
+        exit(1)
+
+    # print help info
+    if '-h' in argv:
+        print("""\nuhex by Joe (necpock)
+version: 0.1
+
+usage: uhex [hex] [options]\n
+
+options:\n
+    -h  help message
+
+  standard:\n
+    -i  convert hex to number (integer) (default)
+    -f  convert hex to number (float)
+    -s  convert hex to string\n
+    
+  reverse:\n
+    -ri convert int to hex.
+    -rs convert string to hex.  usage: uhex "string" -rs\n""")
+
+        exit(0)
+                
+    useri = argv[1]
+    
+
+    ##### test for multiple options #####
+    opt = ['-i', '-f', '-s', '-rs', '-ri']
+    
+    c = 0
+
+    for o in opt:
+        if o in argv:
+            c += 1
+
+    if c > 1:
+        print('too many options supplied.')
+        exit(1)
+    ##### end test #####
+
+    ##### test for genuine hex #####    
+    excl = ['-rs', '-ri']
+
+    hex_test = True
+
+    for e in excl:
+        if e in argv:
+            hex_test = False
+    
+    if hex_test:
+
+        # test for multiples of 1 byte hex
+        #if ( len(useri) % 2 ):
+        #    print('provided hex must be in multiples of 2')
+        #    exit(1)
+
+        # test for genuine hex
+        valid_hex = ['a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C', 'D', 'E', 'F', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+        for a in useri:
+            if not a in valid_hex:
+                print('please provide valid hexadecimal')
+                exit(1)
+    ##### end test #####
+
+    output = ''  # default output string variable
+
+    if '-i' in argv: # int case : convert hex to int
+
+        print('{}'.format(int(useri, base=16)))
+        exit(0)
+
+    elif '-s' in argv:  # string case : convert hex to string
+        
+
+
+        # seperate hex for strings
+        for i in range(int(len(useri) / 2)):
+            _1 = useri[(i*2)]
+            _2 = useri[((i*2) + 1)]
+
+            output = output + chr(int('{}{}'.format(_1, _2), base=16))
+        
+        print("\"{}\"".format(output))
+
+        exit(0)
+
+    elif '-rs' in argv:  # reverse string case : convert string to hex
+
+        for u in useri:
+            output = output + str(hex(ord(u))).replace('0x', '')
+
+        print(output)
+        exit(0)
+
+    elif '-ri' in argv:
+
+        try:
+            print('{}'.format(hex(int(useri)).replace('0x', '')))
+        except ValueError:
+            print('Value is not a number')
+        exit(0)
+
+    else:  # default case : convert hex to int
+        print('{}'.format(int(useri, base=16)))
+        exit(0)
+
+    
+
+if __name__ == '__main__':
+    main(argv)
