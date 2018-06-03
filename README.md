@@ -1,7 +1,7 @@
 # uhex
 uhex - a CLi script to conveniently convert hexadecimal to multiple data-types
 
-usage: uhex [hex] [options]
+usage: uhex [hex] [options]\n
 options:
     -h  help message
   standard:
